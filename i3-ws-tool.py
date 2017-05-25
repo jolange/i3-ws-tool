@@ -27,7 +27,6 @@ import argparse
 import subprocess as sp
 
 i3 = i3ipc.Connection()
-menu_cmd = ['rofi', '-dmenu']
 
 
 def main():
@@ -44,10 +43,11 @@ def main():
     args = parser.parse_args()
 
     while args.run == 'menu':
-        args.run = call_menu(run_opts)
+        args.run = call_menu(action_opts, prompt='action:', selected='switch', no_custom=True)
 
     if args.run == 'switch':
-        i3.command('workspace %s' % call_menu(get_workspaces_names(), prompt='Go to workspace:'))
+        i3.command('workspace %s' % call_menu(get_workspaces_names(), selected=get_focused_workspace_name(),
+                                              prompt='Switch to workspace:'))
     elif args.run == 'next-empty':
         i3.command('workspace %s' % get_next_empty_workspace())
     elif args.run == 'move-next-empty':
@@ -59,12 +59,16 @@ def main():
         raise ValueError("Option %s is unkown." % args.run)
 
 
-def call_menu(opt_list=[], preselection=None, prompt='input:', msg=None):
-    cmd = list(menu_cmd)
+def call_menu(opt_list=[], preselection=None, selected=None, prompt='input:', msg=None, no_custom=False):
+    cmd = ['rofi', '-dmenu']
     if preselection:
         cmd += ['-filter', preselection]
     if msg:
         cmd += ['-mesg', msg]
+    if no_custom:
+        cmd += ['-no-custom']
+    if selected:
+        cmd += ['-select', selected]
     cmd += ['-p', prompt]
     choice = sp.check_output(cmd, input=bytearray('\n'.join(opt_list), 'utf-8'))
     return choice.strip().decode('utf-8')
