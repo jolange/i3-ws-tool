@@ -32,14 +32,22 @@ i3 = i3ipc.Connection()
 def main():
     parser = argparse.ArgumentParser(
         description='Tool to handle, manipulate and modify i3 workspaces.',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=argparse.RawTextHelpFormatter,  # allow newlines
     )
 
-    run_opts = ['menu', 'switch', 'next-empty', 'move-next-empty', 'rename']
+    action_desc = {
+        'menu': 'Show a menu and choose an action',
+        'switch': 'Switch to a workspace chosen from a menu',
+        'next-empty': 'Focus the next empty, numbered  workspace',
+        'move-next-empty': 'Move the focused container to the next empty, numbered  workspace',
+        'rename': 'Rename the focused workspace',
+    }
+    action_opts = action_desc.keys()
 
     parser.add_argument('run', type=str, nargs='?', default='menu',
-                        choices=run_opts,
-                        help='help!')
+                        choices=action_opts, metavar='ACTION',
+                        help='Choose one of these actions:\n' +
+                        '\n'.join('- %s: %s' % (k, v) for k, v in action_desc.items()))
     args = parser.parse_args()
 
     while args.run == 'menu':
@@ -56,7 +64,7 @@ def main():
         i3.command('rename workspace to %s' %
                    call_menu(preselection=get_focused_workspace_name(), prompt='Rename workspace to:'))
     else:
-        raise ValueError("Option %s is unkown." % args.run)
+        raise ValueError("Action %s is unkown." % args.run)
 
 
 def call_menu(opt_list=[], preselection=None, selected=None, prompt='input:', msg=None, no_custom=False):
