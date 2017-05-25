@@ -36,7 +36,7 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    run_opts = ['menu', 'switch', 'next-empty', 'rename']
+    run_opts = ['menu', 'switch', 'next-empty', 'move-next-empty', 'rename']
 
     parser.add_argument('run', type=str, nargs='?', default='menu',
                         choices=run_opts,
@@ -50,6 +50,8 @@ def main():
         i3.command('workspace %s' % call_menu(get_workspaces_names(), prompt='Go to workspace:'))
     elif args.run == 'next-empty':
         i3.command('workspace %s' % get_next_empty_workspace())
+    elif args.run == 'move-next-empty':
+        i3.command('move container to workspace %s' % get_next_empty_workspace())
     elif args.run == 'rename':
         i3.command('rename workspace to %s' %
                    call_menu(preselection=get_focused_workspace_name(), prompt='Rename workspace to:'))
