@@ -99,7 +99,7 @@ def get_numbered_workspaces():
 
 
 def get_next_empty_workspace():
-    for num, ws in enumerate(get_numbered_workspaces(), 1):
+    for num, ws in enumerate(sorted(get_numbered_workspaces()), 1):
         if num != ws:
             return num
     return ws + 1
