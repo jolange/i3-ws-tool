@@ -99,6 +99,8 @@ def get_numbered_workspaces():
 
 
 def get_next_empty_workspace():
+    # fallback: if no numbered workspaces exist, "1" is the next empty
+    ws = 0
     for num, ws in enumerate(sorted(get_numbered_workspaces()), 1):
         if num != ws:
             return num
