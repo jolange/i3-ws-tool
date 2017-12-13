@@ -37,8 +37,9 @@ def main():
 
     action_desc = {
         'menu': 'Show a menu and choose an action',
-        'switch': 'Switch to a workspace chosen from a menu',
+        'switch': 'Switch to a workspace chosen from a menu or a new one',
         'next-empty': 'Focus the next empty, numbered  workspace',
+        'move': 'Move container to a workspace chosen from a menu or a new one',
         'move-next-empty': 'Move the focused container to the next empty, numbered  workspace',
         'rename': 'Rename the focused workspace',
     }
@@ -58,6 +59,8 @@ def main():
                                               prompt='Switch to workspace:'))
     elif args.run == 'next-empty':
         i3.command('workspace %s' % get_next_empty_workspace())
+    elif args.run == 'move':
+        i3.command('move container to workspace %s' % call_menu(get_workspaces_names(), prompt='Move to workspace:'))
     elif args.run == 'move-next-empty':
         i3.command('move container to workspace %s' % get_next_empty_workspace())
     elif args.run == 'rename':

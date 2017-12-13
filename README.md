@@ -21,8 +21,9 @@ Tool to handle, manipulate and modify i3 workspaces.
 positional arguments:
   ACTION      Choose one of these actions:
               - menu: Show a menu and choose an action
-              - switch: Switch to a workspace chosen from a menu
+              - switch: Switch to a workspace chosen from a menu or a new one
               - next-empty: Focus the next empty, numbered  workspace
+              - move: Move container to a workspace chosen from a menu or a new one
               - move-next-empty: Move the focused container to the next empty, numbered  workspace
               - rename: Rename the focused workspace
 
