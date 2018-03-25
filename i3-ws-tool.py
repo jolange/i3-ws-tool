@@ -52,25 +52,25 @@ def main():
     args = parser.parse_args()
 
     while args.run == 'menu':
-        args.run = call_menu(action_opts, prompt='action:', selected='switch', no_custom=True)
+        args.run = call_menu(action_opts, prompt='action', selected='switch', no_custom=True)
 
     if args.run == 'switch':
         i3.command('workspace %s' % call_menu(get_workspaces_names(), selected=get_focused_workspace_name(),
-                                              prompt='Switch to workspace:'))
+                                              prompt='Switch to workspace'))
     elif args.run == 'next-empty':
         i3.command('workspace %s' % get_next_empty_workspace())
     elif args.run == 'move':
-        i3.command('move container to workspace %s' % call_menu(get_workspaces_names(), prompt='Move to workspace:'))
+        i3.command('move container to workspace %s' % call_menu(get_workspaces_names(), prompt='Move to workspace'))
     elif args.run == 'move-next-empty':
         i3.command('move container to workspace %s' % get_next_empty_workspace())
     elif args.run == 'rename':
         i3.command('rename workspace to "%s"' %
-                   call_menu(preselection=get_focused_workspace_name(), prompt='Rename workspace to:'))
+                   call_menu(preselection=get_focused_workspace_name(), prompt='Rename workspace to'))
     else:
         raise ValueError("Action %s is unkown." % args.run)
 
 
-def call_menu(opt_list=[], preselection=None, selected=None, prompt='input:', msg=None, no_custom=False):
+def call_menu(opt_list=[], preselection=None, selected=None, prompt='input', msg=None, no_custom=False):
     cmd = ['rofi', '-dmenu']
     if preselection:
         cmd += ['-filter', preselection]
