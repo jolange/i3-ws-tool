@@ -20,7 +20,7 @@
 try:
     import i3ipc
 except ImportError:
-    print("You need to install i3ipc: https://github.com/acrisci/i3ipc-python")
+    print("You need to install i3ipc: https://github.com/altdesktop/i3ipc-python")
     raise
 
 import argparse
