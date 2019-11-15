@@ -86,19 +86,19 @@ def call_menu(opt_list=[], preselection=None, selected=None, prompt='input', msg
 
 
 def get_workspaces_names():
-    return [ws['name'] for ws in i3.get_workspaces()]
+    return [ws.name for ws in i3.get_workspaces()]
 
 
 def get_focused_workspace_name():
     for ws in i3.get_workspaces():
-        if ws['focused']:
-            return ws['name']
+        if ws.focused:
+            return ws.name
 
 
 def get_numbered_workspaces():
     for ws in i3.get_workspaces():
-        if ws['num'] >= 0:
-            yield ws['num']
+        if ws.num >= 0:
+            yield ws.num
 
 
 def get_next_empty_workspace():
