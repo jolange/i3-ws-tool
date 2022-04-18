@@ -42,6 +42,7 @@ def main():
         'move': 'Move container to a workspace chosen from a menu or a new one',
         'move-next-empty': 'Move the focused container to the next empty, numbered  workspace',
         'rename': 'Rename the focused workspace',
+        'clear-output': 'Move all workspaces from the active output to a different one',
     }
     action_opts = action_desc.keys()
 
@@ -66,6 +67,12 @@ def main():
     elif args.run == 'rename':
         i3.command('rename workspace to "%s"' %
                    call_menu(preselection=get_focused_workspace().name, prompt='Rename workspace to'))
+    elif args.run == 'clear-output':
+        output = get_focused_output()
+        target = call_menu(get_output_names(), selected=output,
+                           prompt=f'Move all workspaces of {output} to output')
+        for ws in get_workspaces_on_output(output):
+            i3.command(f'[workspace="{ws.name}"] move workspace to output {target}')
     else:
         raise ValueError("Action %s is unkown." % args.run)
 
@@ -94,6 +101,7 @@ def get_focused_workspace():
         if ws.focused:
             return ws
 
+
 def get_numbered_workspaces():
     for ws in i3.get_workspaces():
         if ws.num >= 0:
@@ -107,6 +115,22 @@ def get_next_empty_workspace():
         if num != ws:
             return num
     return ws + 1
+
+
+def get_workspaces_on_output(output):
+    for ws in i3.get_workspaces():
+        if ws.output == output:
+            yield ws
+
+
+def get_focused_output():
+    return get_focused_workspace().output
+
+
+def get_output_names():
+    for o in i3.get_outputs():
+        if o.active:
+            yield o.name
 
 
 if __name__ == '__main__':
