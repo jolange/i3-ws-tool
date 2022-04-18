@@ -55,7 +55,7 @@ def main():
         args.run = call_menu(action_opts, prompt='action', selected='switch', no_custom=True)
 
     if args.run == 'switch':
-        i3.command('workspace %s' % call_menu(get_workspaces_names(), selected=get_focused_workspace_name(),
+        i3.command('workspace %s' % call_menu(get_workspaces_names(), selected=get_focused_workspace().name,
                                               prompt='Switch to workspace'))
     elif args.run == 'next-empty':
         i3.command('workspace %s' % get_next_empty_workspace())
@@ -65,7 +65,7 @@ def main():
         i3.command('move container to workspace %s' % get_next_empty_workspace())
     elif args.run == 'rename':
         i3.command('rename workspace to "%s"' %
-                   call_menu(preselection=get_focused_workspace_name(), prompt='Rename workspace to'))
+                   call_menu(preselection=get_focused_workspace().name, prompt='Rename workspace to'))
     else:
         raise ValueError("Action %s is unkown." % args.run)
 
@@ -89,11 +89,10 @@ def get_workspaces_names():
     return [ws.name for ws in i3.get_workspaces()]
 
 
-def get_focused_workspace_name():
+def get_focused_workspace():
     for ws in i3.get_workspaces():
         if ws.focused:
-            return ws.name
-
+            return ws
 
 def get_numbered_workspaces():
     for ws in i3.get_workspaces():
