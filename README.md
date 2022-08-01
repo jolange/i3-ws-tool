@@ -26,8 +26,9 @@ positional arguments:
               - move: Move container to a workspace chosen from a menu or a new one
               - move-next-empty: Move the focused container to the next empty, numbered  workspace
               - rename: Rename the focused workspace
+              - clear-output: Move all workspaces from the active output to a different one
 
-optional arguments:
+options:
   -h, --help  show this help message and exit
 ```
 
