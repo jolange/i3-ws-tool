@@ -43,6 +43,7 @@ def main():
         'move-next-empty': 'Move the focused container to the next empty, numbered  workspace',
         'rename': 'Rename the focused workspace',
         'clear-output': 'Move all workspaces from the active output to a different one',
+        'move-to-single-output': 'Move all existing workspaces to a single output'
     }
     action_opts = action_desc.keys()
 
@@ -73,6 +74,13 @@ def main():
                            prompt=f'Move all workspaces of {output} to output')
         for ws in get_workspaces_on_output(output):
             i3.command(f'[workspace="{ws.name}"] move workspace to output {target}')
+    elif args.run == 'move-to-single-output':
+        target = call_menu(get_output_names(), selected=get_focused_output(),
+                           prompt=f'Move all workspaces to output')
+        focused_ws = get_focused_workspace().name
+        for wsname in get_workspaces_names():
+            i3.command(f'[workspace="{wsname}"] move workspace to output {target}')
+        i3.command('workspace --no-auto-back-and-forth %s' % focused_ws)
     else:
         raise ValueError("Action %s is unkown." % args.run)
 
@@ -93,7 +101,8 @@ def call_menu(opt_list=[], preselection=None, selected=None, prompt='input', msg
 
 
 def get_workspaces_names():
-    return [ws.name for ws in i3.get_workspaces()]
+    for ws in i3.get_workspaces():
+        yield ws.name
 
 
 def get_focused_workspace():
