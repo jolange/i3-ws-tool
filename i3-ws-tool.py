@@ -50,7 +50,11 @@ def main():
     parser.add_argument('run', type=str, nargs='?', default='menu',
                         choices=action_opts, metavar='ACTION',
                         help='Choose one of these actions:\n' + '\n'.join('- %s: %s' % (k, v) for k, v in action_desc.items()))
+    parser.add_argument('--dest', type=str, metavar='DEST', nargs='?', help='Destination for move-to-single-output')
+
     args = parser.parse_args()
+    if args.dest is not None and args.run != 'move-to-single-output':
+        parser.error('DEST argument is only implemented for move-to-single-output')
 
     while args.run == 'menu':
         args.run = call_menu(action_opts, prompt='action', selected='switch', no_custom=True)
@@ -74,8 +78,8 @@ def main():
         for ws in get_workspaces_on_output(output):
             i3.command(f'[workspace="{ws.name}"] move workspace to output {target}')
     elif args.run == 'move-to-single-output':
-        target = call_menu(get_output_names(), selected=get_focused_output(),
-                           prompt=f'Move all workspaces to output')
+        target = args.dest or call_menu(get_output_names(), selected=get_focused_output(),
+                                        prompt=f'Move all workspaces to output')
         focused_ws = get_focused_workspace().name
         for wsname in get_workspaces_names():
             i3.command(f'[workspace="{wsname}"] move workspace to output {target}')
