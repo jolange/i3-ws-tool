@@ -49,8 +49,7 @@ def main():
 
     parser.add_argument('run', type=str, nargs='?', default='menu',
                         choices=action_opts, metavar='ACTION',
-                        help='Choose one of these actions:\n' +
-                        '\n'.join('- %s: %s' % (k, v) for k, v in action_desc.items()))
+                        help='Choose one of these actions:\n' + '\n'.join('- %s: %s' % (k, v) for k, v in action_desc.items()))
     args = parser.parse_args()
 
     while args.run == 'menu':
